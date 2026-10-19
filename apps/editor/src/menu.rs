@@ -630,15 +630,19 @@ pub fn shortcuts() -> Vec<(Modifiers, Key, Action)> {
 
 pub fn app_bar(ui: &mut Ui, ed: &mut Editor) {
     let mut picked = None;
+    #[cfg(not(target_os = "macos"))]
     let ctx = ui.ctx().clone();
     // Empty bar space moves the window, and double-clicking it maximizes.
-    let maximized = ctx.input(|i| i.viewport().maximized.unwrap_or(false));
-    let title = ui.interact(ui.max_rect(), ui.id().with("title-bar"), Sense::click_and_drag());
-    if title.drag_started() {
-        ctx.send_viewport_cmd(ViewportCommand::StartDrag);
-    }
-    if title.double_clicked() {
-        ctx.send_viewport_cmd(ViewportCommand::Maximized(!maximized));
+    #[cfg(not(target_os = "macos"))]
+    {
+        let maximized = ctx.input(|i| i.viewport().maximized.unwrap_or(false));
+        let title = ui.interact(ui.max_rect(), ui.id().with("title-bar"), Sense::click_and_drag());
+        if title.drag_started() {
+            ctx.send_viewport_cmd(ViewportCommand::StartDrag);
+        }
+        if title.double_clicked() {
+            ctx.send_viewport_cmd(ViewportCommand::Maximized(!maximized));
+        }
     }
     ui.horizontal_centered(|ui| {
         ui.spacing_mut().item_spacing.x = 4.0;
@@ -659,6 +663,7 @@ pub fn app_bar(ui: &mut Ui, ed: &mut Editor) {
         });
         ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
             ui.spacing_mut().item_spacing.x = 0.0;
+            #[cfg(not(target_os = "macos"))]
             window_buttons(ui, maximized);
             ui.add_space(12.0);
             ui.spacing_mut().item_spacing.x = 4.0;
@@ -756,6 +761,7 @@ fn share_and_publish(ui: &mut Ui, picked: &mut Option<Action>, canvas: bool) {
 }
 
 /// Minimize, maximize (or restore) and close, as Windows 11 draws them.
+#[cfg(not(target_os = "macos"))]
 fn window_buttons(ui: &mut Ui, maximized: bool) {
     let buttons = [
         (Icon::WinClose, "Close", ViewportCommand::Close),

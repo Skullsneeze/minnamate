@@ -44,7 +44,7 @@ fn main() -> eframe::Result {
         .with_title("Minnamate")
         .with_inner_size([1600.0, 940.0])
         // The app bar is the title bar, as in Animate on Windows.
-        .with_decorations(false)
+        .with_decorations(cfg!(target_os = "macos"))
         .with_min_inner_size([960.0, 600.0]);
     if let Ok(icon) = eframe::icon_data::from_png_bytes(include_bytes!("../../../assets/logo.png")) {
         viewport = viewport.with_icon(icon);

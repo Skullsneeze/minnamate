@@ -17,7 +17,16 @@ cargo run -p minnamate-editor --release -- path\to\movie.fla
 
 After the first build you can start `target\release\minnamate.exe` directly, and drag `.fla` files onto its window.
 
-The editor follows Animate's shortcuts: Enter plays, `,` and `.` step frames, F5/F6/F7 insert frames and keyframes, F8 converts the selection to a symbol, Ctrl+Enter tests the movie, Ctrl+Z undoes, and the tool letters (V, R, O, N, Y, L, H, Z...) pick tools.
+On an Apple Silicon Mac, with Xcode Command Line Tools and Rust installed:
+
+```sh
+cargo run -p minnamate-editor --release
+cargo run -p minnamate-editor --release -- path/to/movie.fla
+```
+
+To package a native `Minnamate.app` and zip it for sharing, run `scripts/package-macos.sh`. The first run may be blocked by Gatekeeper because locally built packages are unsigned; right-click the app and choose **Open**. Video import/export additionally needs `ffmpeg` on `PATH`.
+
+The editor follows Animate's shortcuts: Enter plays, `,` and `.` step frames, F5/F6/F7 insert frames and keyframes, F8 converts the selection to a symbol, Ctrl+Enter (Command+Enter on Mac) tests the movie, Ctrl+Z (Command+Z on Mac) undoes, and the tool letters (V, R, O, N, Y, L, H, Z...) pick tools.
 
 ## Command line
 

@@ -1800,7 +1800,15 @@ fn recent_file() -> Option<PathBuf> {
     if cfg!(test) {
         return None;
     }
-    Some(PathBuf::from(std::env::var_os("APPDATA")?).join("Minnamate").join("recent.txt"))
+    #[cfg(target_os = "windows")]
+    let config = PathBuf::from(std::env::var_os("APPDATA")?);
+    #[cfg(target_os = "macos")]
+    let config = PathBuf::from(std::env::var_os("HOME")?).join("Library/Application Support");
+    #[cfg(target_os = "linux")]
+    let config = std::env::var_os("XDG_CONFIG_HOME")
+        .map(PathBuf::from)
+        .or_else(|| std::env::var_os("HOME").map(|home| PathBuf::from(home).join(".config")))?;
+    Some(config.join("Minnamate").join("recent.txt"))
 }
 
 fn load_recent() -> Vec<PathBuf> {
@@ -3944,4 +3952,3 @@ mod tests {
         assert_eq!(h.state().undo.len(), 1);
     }
 }
-
