@@ -632,10 +632,10 @@ pub fn app_bar(ui: &mut Ui, ed: &mut Editor) {
     let mut picked = None;
     #[cfg(not(target_os = "macos"))]
     let ctx = ui.ctx().clone();
+    let maximized = ctx.input(|i| i.viewport().maximized.unwrap_or(false));
     // Empty bar space moves the window, and double-clicking it maximizes.
     #[cfg(not(target_os = "macos"))]
     {
-        let maximized = ctx.input(|i| i.viewport().maximized.unwrap_or(false));
         let title = ui.interact(ui.max_rect(), ui.id().with("title-bar"), Sense::click_and_drag());
         if title.drag_started() {
             ctx.send_viewport_cmd(ViewportCommand::StartDrag);
